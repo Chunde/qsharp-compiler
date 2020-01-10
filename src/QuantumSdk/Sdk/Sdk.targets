@@ -35,7 +35,7 @@
   <Target Name="QsharpClean" DependsOnTargets="Restore" BeforeTargets="Clean">
     <ItemGroup>
       <FilesToRemove Include="$(GeneratedFilesOutputPath)**" />
-      <Compile Remove="$(FilesToRemove)**/*.g.cs" />
+      <Compile Remove="$(FilesToRemove)**\*.g.cs" />
     </ItemGroup>
     <Delete Files="@(FilesToRemove)" />
   </Target>  
@@ -50,7 +50,7 @@
     <!-- generate a suitable build configuration for the Q# command line compiler (qsc) -->
     <PropertyGroup>
       <_VerbosityFlag Condition="'$(QscVerbosity)' == 'Detailed' Or '$(QscVerbosity)' == 'Diagnostic'">-v</_VerbosityFlag>
-      <_BuildConfigFile>$(QscBuildConfigOutputPath)qsc.config</_BuildConfigFile>
+      <_BuildConfigFile>$(QscBuildConfigOutputPath)\qsc.config</_BuildConfigFile>
       <_BuildConfigGenerationOutputFlag>--output &quot;$(_BuildConfigFile)&quot;</_BuildConfigGenerationOutputFlag>
       <_BuildConfigGenerationQscReferencesFlag Condition="@(ResolvedQscReferencesAndPriorities->Count()) &gt; 0">--QscReferences &quot;@(ResolvedQscReferencesAndPriorities,'&quot; &quot;')&quot;</_BuildConfigGenerationQscReferencesFlag>
       <QscBuildConfigGeneration>$(QscBuildConfigExe) $(_VerbosityFlag) $(_BuildConfigGenerationOutputFlag) $(_BuildConfigGenerationQscReferencesFlag)</QscBuildConfigGeneration>
@@ -73,12 +73,12 @@
       <_QscPackageLoadFallbackFoldersFlag Condition="'$(OutputPath)' != '' And '$(MSBuildProjectDirectory)' != ''">--package-load-fallback-folders &quot;$(MSBuildProjectDirectory)/$(OutputPath)&quot;</_QscPackageLoadFallbackFoldersFlag>
       <QscCommand>$(QscExe) build --proj &quot;$(PathCompatibleAssemblyName)&quot; --format MsBuild $(_VerbosityFlag) $(_QscCommandDocsFlag) $(_QscCommandInputFlag) $(_QscCommandOutputFlag) $(_QscCommandReferencesFlag) $(_QscCommandLoadFlag) $(_QscPackageLoadFallbackFoldersFlag)</QscCommand>
     </PropertyGroup>
-    <WriteLinesToFile File="$(GeneratedFilesOutputPath)qsc-command.txt" Lines=":: files ::;@(QsharpCompile);:: references ::;@(ResolvedQsharpReferences);:: loaded ::;@(_PrioritizedResolvedQscReferences);:: command ::;$(QscCommand)" Overwrite="true"/>
+    <WriteLinesToFile File="$(GeneratedFilesOutputPath)\qsc-command.txt" Lines=":: files ::;@(QsharpCompile);:: references ::;@(ResolvedQsharpReferences);:: loaded ::;@(_PrioritizedResolvedQscReferences);:: command ::;$(QscCommand)" Overwrite="true"/>
     <Exec Command="$(QscCommand)" IgnoreExitCode="false" /> 
     <!-- configure the dll built by the C# compiler -->
     <ItemGroup>
       <EmbeddedResource Include="$(_EmittedBinaryPath)" LogicalName="__qsharp_data__.bson" Visible="false" />
-      <Compile Condition="$(CsharpGeneration)" Include="$(GeneratedFilesOutputPath)**/*.g.cs" Exclude="@(Compile)" AutoGen="true" />
+      <Compile Condition="$(CsharpGeneration)" Include="$(GeneratedFilesOutputPath)**\*.g.cs" Exclude="@(Compile)" AutoGen="true" />
     </ItemGroup>
   </Target>   
 
