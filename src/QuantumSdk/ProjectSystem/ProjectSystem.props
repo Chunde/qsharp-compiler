@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!-- Work around issues in MSBuild versions prior to 16.0. -->
-    <MSBuildAllProjects Condition=" '$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0' ">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">
       $(MSBuildAllProjects);$(MSBuildThisFileFullPath)
     </MSBuildAllProjects>
   </PropertyGroup>

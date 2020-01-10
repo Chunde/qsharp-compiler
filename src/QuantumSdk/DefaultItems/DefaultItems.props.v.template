@@ -2,7 +2,7 @@
 
   <!-- Work around issues in MSBuild versions prior to 16.0. -->
   <PropertyGroup>
-    <MSBuildAllProjects Condition=" '$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0' ">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">
       $(MSBuildAllProjects);$(MSBuildThisFileFullPath)
     </MSBuildAllProjects>
   </PropertyGroup>
@@ -33,9 +33,9 @@
     <CsharpGeneration>true</CsharpGeneration> <!-- at some point we may want to make False the default -->
     <IncludeQsharpCorePackages>true</IncludeQsharpCorePackages> 
     <QsharpDocsGeneration>false</QsharpDocsGeneration>
-    <DefaultQscBuildConfigExe>dotnet "$(MSBuildThisFileDirectory)../tools/utils/Microsoft.Quantum.Sdk.BuildConfiguration.dll"</DefaultQscBuildConfigExe> 
+    <DefaultQscBuildConfigExe>dotnet &quot;$(MSBuildThisFileDirectory)../tools/utils/Microsoft.Quantum.Sdk.BuildConfiguration.dll&quot;</DefaultQscBuildConfigExe> 
     <QscBuildConfigExe>$(DefaultQscBuildConfigExe)</QscBuildConfigExe> 
-    <DefaultQscExe>dotnet "$(MSBuildThisFileDirectory)../tools/qsc/qsc.dll"</DefaultQscExe> 
+    <DefaultQscExe>dotnet &quot;$(MSBuildThisFileDirectory)../tools/qsc/qsc.dll&quot;</DefaultQscExe> 
     <QscExe>$(DefaultQscExe)</QscExe> 
   </PropertyGroup>
 
