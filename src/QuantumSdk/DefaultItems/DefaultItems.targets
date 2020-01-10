@@ -82,7 +82,7 @@
     <ItemGroup>
       <ResolvedQscReferences Remove="@(ResolvedQscReferences)"/>
       <ResolvedQscReferences Include="%(_RelevantQscProjectReference.Identity)" Priority="%(_RelevantQscProjectReference.Priority)" />
-      <ResolvedQscReferences Include="$(%(_RelevantQscPackageReferencePathProperty.Identity))/lib/**/*.dll" Priority="%(_RelevantQscPackageReferencePathProperty.Priority)" /> 
+      <ResolvedQscReferences Include="$(%(_RelevantQscPackageReferencePathProperty.Identity))\lib\**\*.dll" Priority="%(_RelevantQscPackageReferencePathProperty.Priority)" /> 
       <ResolvedQscReferencesAndPriorities Remove="@(ResolvedQscReferencesAndPriorities)"/>
       <ResolvedQscReferencesAndPriorities Include="(%(ResolvedQscReferences.Identity), %(ResolvedQscReferences.Priority))" /> 
     </ItemGroup>
