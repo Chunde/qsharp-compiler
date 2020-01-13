@@ -91,6 +91,9 @@ namespace Microsoft.Quantum.QsCompiler.CommandLineCompiler
             var commandLine = String.Join(" ", responseFiles.Select(File.ReadAllText));
             Console.WriteLine($"### COMMAND LINE: {Environment.NewLine}{commandLine}{Environment.NewLine}###");
             var args = SplitCommandLineArguments(commandLine);
+            Console.WriteLine($"### AFTER SPLIT:");
+            foreach (var arg in args) Console.WriteLine(arg);
+            Console.WriteLine($"###");
             var parsed = Parser.Default.ParseArguments<BuildOptions>(args);
             return parsed.MapResult(
                 (BuildOptions opts) => opts,
@@ -116,8 +119,12 @@ namespace Microsoft.Quantum.QsCompiler.CommandLineCompiler
             if (logger == null) throw new ArgumentNullException(nameof(logger));
 
             if (options?.ResponseFiles != null && options.ResponseFiles.Any())
-            { options = FromResponseFiles(options.ResponseFiles); }
+            { 
+                options = FromResponseFiles(options.ResponseFiles); 
+            }
             if (options == null) return ReturnCode.INVALID_ARGUMENTS;
+            options.Verbosity = "d";
+            options.GetLogger();
 
             var usesPlugins = options.Plugins != null && options.Plugins.Any();
             var loadOptions = new CompilationLoader.Configuration
