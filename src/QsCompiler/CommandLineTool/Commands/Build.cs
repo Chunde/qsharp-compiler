@@ -89,6 +89,7 @@ namespace Microsoft.Quantum.QsCompiler.CommandLineCompiler
         {
             if (responseFiles == null) throw new ArgumentNullException(nameof(responseFiles));
             var commandLine = String.Join(" ", responseFiles.Select(File.ReadAllText));
+            Console.WriteLine($"### COMMAND LINE: {Environment.NewLine}{commandLine}{Environment.NewLine}###");
             var args = SplitCommandLineArguments(commandLine);
             var parsed = Parser.Default.ParseArguments<BuildOptions>(args);
             return parsed.MapResult(
