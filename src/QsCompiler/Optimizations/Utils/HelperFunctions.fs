@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-module Microsoft.Quantum.QsCompiler.Optimizations.Utils
+module internal Microsoft.Quantum.QsCompiler.Experimental.Utils
 
 open System
 open System.Collections.Immutable
 open System.Numerics
 open Microsoft.Quantum.QsCompiler
 open Microsoft.Quantum.QsCompiler.DataTypes
-open Microsoft.Quantum.QsCompiler.Optimizations.ComputationExpressions
+open Microsoft.Quantum.QsCompiler.ComputationExpressions
 open Microsoft.Quantum.QsCompiler.SyntaxExtensions
 open Microsoft.Quantum.QsCompiler.SyntaxTokens
 open Microsoft.Quantum.QsCompiler.SyntaxTree
@@ -20,6 +20,14 @@ type internal ExprKind = QsExpressionKind<TypedExpression, Identifier, ResolvedT
 type internal TypeKind = QsTypeKind<ResolvedType, UserDefinedType, QsTypeParameter, CallableInformation>
 /// Shorthand for a QsInitializerKind
 type internal InitKind = QsInitializerKind<ResolvedInitializer, TypedExpression>
+
+
+/// The maybe monad. Returns None if any of the lines are None.
+let internal maybe = MaybeBuilder()
+
+/// Returns Some () if x is true, and returns None otherwise.
+/// Normally used after a do! in the Maybe monad, which makes this act as an assertion.
+let internal check x = if x then Some () else None
 
 
 /// Returns whether a given expression is a literal (and thus a constant)
