@@ -1,13 +1,13 @@
 ﻿namespace Microsoft.Quantum.Demo {
-    open Microsoft.Quantum.Intrinsic;
     
+    function GetPair (n : Int) : (Int, Int) {
+        return (n, n+1);
+    }
+
+    @EntryPoint()
     operation SampleProgram () : Int {
 
-        let range = 1 .. 10;
-        mutable tot = 0;
-        for (value in range){
-            set tot += value;
-        }
-        return tot;
+        let (a, b) = GetPair(5);
+        return a + b;
     }
 }

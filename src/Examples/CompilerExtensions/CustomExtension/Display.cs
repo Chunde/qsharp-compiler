@@ -15,7 +15,7 @@ namespace Microsoft.Quantum.Demos.CompilerExtensions.Demo
             this.AssemblyConstants = new Dictionary<string, string>();
 
         public string Name => "DisplayQsharpCode";
-        public int Priority => 10;
+        public int Priority => 0; // only compared within this dll
 
         public IDictionary<string, string> AssemblyConstants { get; }
         public IEnumerable<IRewriteStep.Diagnostic> GeneratedDiagnostics => null;

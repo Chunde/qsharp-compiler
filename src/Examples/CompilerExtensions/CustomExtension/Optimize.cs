@@ -4,8 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
-using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.Quantum.QsCompiler;
 using Microsoft.Quantum.QsCompiler.Experimental;
@@ -14,7 +14,7 @@ using Microsoft.Quantum.QsCompiler.SyntaxTree;
 
 namespace Microsoft.Quantum.Demos.CompilerExtensions.Demo
 {
-    public class CustomCompilerExtension //: IRewriteStep
+    public class CustomCompilerExtension : IRewriteStep
     {
         private readonly List<IRewriteStep.Diagnostic> Diagnostics;
 
@@ -45,7 +45,7 @@ namespace Microsoft.Quantum.Demos.CompilerExtensions.Demo
             {
                 Severity = DiagnosticSeverity.Warning,
                 Message = $"Required namespace {requiredNamespace} does not exist.",
-                Source = Assembly.GetExecutingAssembly().Location,
+                Source = Path.GetFullPath(Path.Combine("..","CustomExtension","Optimize.cs")),
                 Stage = IRewriteStep.Stage.PreconditionVerification
             });
 
@@ -54,11 +54,14 @@ namespace Microsoft.Quantum.Demos.CompilerExtensions.Demo
 
         public bool Transformation(QsCompilation compilation, out QsCompilation transformed)
         {
-            OptimizingTransformation[] Script(ImmutableDictionary<QsQualifiedName, QsCallable> callables) => new OptimizingTransformation[]
+            static OptimizingTransformation[] Script(ImmutableDictionary<QsQualifiedName, QsCallable> callables) => new OptimizingTransformation[]
             {
-                //new ConstantPropagation(callables)
+                new ConstantPropagation(callables),
+                new VariableRemoval(),
+                new StatementRemoval(true),
             };
-            transformed = compilation; // PreEvaluation.Script(script, compilation);
+
+            transformed = PreEvaluation.WithScript(Script, compilation);
             return true;
         }
 
