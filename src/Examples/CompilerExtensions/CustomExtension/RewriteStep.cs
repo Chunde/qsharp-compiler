@@ -60,7 +60,7 @@ namespace Microsoft.Quantum.Demos.CompilerExtensions.Demo
             {
                 Severity = DiagnosticSeverity.Warning,
                 Message = $"Required namespace {requiredNamespace} does not exist.",
-                Source = Assembly.GetExecutingAssembly().Location
+                Source = Assembly.GetExecutingAssembly().Location,
                 Stage = IRewriteStep.Stage.PreconditionVerification
             });
             return true;
