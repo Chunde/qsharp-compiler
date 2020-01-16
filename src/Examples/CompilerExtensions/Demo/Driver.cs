@@ -7,7 +7,7 @@ namespace Microsoft.Quantum.Demo
         static void Main(string[] args)
         {
             using var qsim = new QuantumSimulator();
-            HelloQ.Run(qsim).Wait();
+            SampleProgram.Run(qsim).Wait();
         }
     }
 }

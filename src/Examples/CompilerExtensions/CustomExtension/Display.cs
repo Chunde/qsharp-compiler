@@ -1,46 +1,40 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.IO;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.Quantum.QsCompiler.SyntaxTree;
-using Microsoft.Quantum.QsCompiler.Transformations.BasicTransformations;
-using Microsoft.Quantum.QsCompiler.Transformations.QsCodeOutput;
-using System.Collections.Immutable;
-using Microsoft.Quantum.QsCompiler.DataTypes;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using Microsoft.Quantum.QsCompiler;
+using Microsoft.Quantum.QsCompiler.SyntaxTree;
+
 
 namespace Microsoft.Quantum.Demos.CompilerExtensions.Demo
 {
-    internal class Display
+    public class DisplayQsharpCode : IRewriteStep
     {
-        private readonly QsCompilation Compilation;
-        private ImmutableHashSet<NonNullable<string>> SourceFiles;
-        private ImmutableDictionary<NonNullable<string>, ImmutableArray<(NonNullable<string>, string)>> Imports;
+        public DisplayQsharpCode() =>
+            this.AssemblyConstants = new Dictionary<string, string>();
 
-        internal Display(QsCompilation compilation)
+        public string Name => "DisplayQsharpCode";
+        public int Priority => 10;
+
+        public IDictionary<string, string> AssemblyConstants { get; }
+        public IEnumerable<IRewriteStep.Diagnostic> GeneratedDiagnostics => null;
+
+        public bool ImplementsPreconditionVerification => true;
+        public bool ImplementsTransformation => false;
+        public bool ImplementsPostconditionVerification => false;
+
+        public bool PreconditionVerification(QsCompilation compilation)
         {
-            this.Compilation = compilation;
-            this.SourceFiles = GetSourceFiles.Apply(compilation.Namespaces);
-            this.Imports = compilation.Namespaces.ToImmutableDictionary(ns => ns.Name, _ => ImmutableArray<(NonNullable<string>, string)>.Empty);
+            var display = new Display(compilation);
+            display.Show();
+            return true;
         }
 
-        public void Show(string file = null)
-        {
-            var filesToShow = file == null
-                ? this.SourceFiles.Where(f => f.Value.EndsWith(".qs")).OrderBy(f => f).Select(f => (f, this.Imports)).ToArray()
-                : new[] { (NonNullable<string>.New(file), this.Imports) };
+        public bool Transformation(QsCompilation compilation, out QsCompilation transformed) =>
+            throw new NotImplementedException();
 
-            SyntaxTreeToQs.Apply(out List<ImmutableDictionary<NonNullable<string>, string>> generated, this.Compilation.Namespaces, filesToShow.First());
-            var code = generated.Single().Values.Select(nsCode => $"{nsCode}{Environment.NewLine}");
-
-            var tempFile = Path.GetTempFileName();
-            File.WriteAllLines(tempFile, code);
-            Process.Start("notepad.exe", tempFile);
-        }
-
+        public bool PostconditionVerification(QsCompilation compilation) =>
+            throw new NotImplementedException();
     }
-
 }
